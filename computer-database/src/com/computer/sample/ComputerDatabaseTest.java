@@ -12,6 +12,7 @@ import org.openqa.selenium.By.ByTagName;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 class returnValues{
 	WebDriver driver;
@@ -102,7 +103,7 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 				
 	}
 	
-	public void HelperCreateComputerComplete(String computerName, String IntroducedDate, String DiscontinuedDate, String company) throws InterruptedException
+	public void HelperCreateComputerComplete(String computerName, String introducedDate, String discontinuedDate, String company) throws InterruptedException
 	{
 		String sampleAppUrl = "http://computer-database.herokuapp.com/computers";
 		WebDriver driver = webDriver;	
@@ -119,15 +120,15 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		inputName.sendKeys(computerName);
 		
 		WebElement introduced = SeleniumHelper.fetchElementByID(driver, "introduced");
-		introduced.sendKeys(IntroducedDate);
+		introduced.sendKeys(introducedDate);
 		
 		WebElement discontinued = SeleniumHelper.fetchElementByID(driver, "discontinued");
-		discontinued.sendKeys(DiscontinuedDate);
+		discontinued.sendKeys(discontinuedDate);
 		
-		/*
-		WebElement company = SeleniumHelper.fetchElementByID(driver, "company");
-		company.
-		*/
+		
+		Select select = new Select(driver.findElement(By.id("company")));
+		select.selectByVisibleText(company);
+		
 		
 		WebElement createButton = SeleniumHelper.fetchElementByXPath(driver, "//div[@class='actions']/input[@class='btn primary']");
 		createButton.click();	
@@ -139,19 +140,19 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 	public void CreateComputerBasicPositive() throws InterruptedException
 	{
 		String cName = "A1T1C1";
-		Assert.assertEquals("*Before create computer name already exists!*",false, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*Before create computer name already exists!*",false, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperCreateComputer(cName);
-		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperDeleteComputer(cName);
 	}
 	
 	@Test
-	public void CreateComputer_Positive_Complete() throws InterruptedException
+	public void CreateComputer_Positive_AllParameters() throws InterruptedException
 	{
 		String cName = "A1T1C1PC1";
-		Assert.assertEquals("*Before create computer name already exists!*",false, HelperCompDB.HelperSearchComputer(webDriver,cName));
-		HelperCreateComputerComplete(cName, "1993-06-12", "1997-09-30", null);
-		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*Before create operation, computer name already exists!*",false, CompDBHelper.HelperSearchComputer(webDriver,cName));
+		HelperCreateComputerComplete(cName, "1993-06-12", "1997-09-30", "Tandy Corporation");
+		Assert.assertEquals("*After create, computer name doesnt exist in table!*",true, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperDeleteComputer(cName);
 	}
 	
@@ -161,9 +162,9 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		String cName = "A1T1R1PC1";
 		String introducedDate = "1998-06-01";
 		String discontinuedDate = "2007-09-30";
-		Assert.assertEquals("*Before create computer name already exists!*",false, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*Before create computer name already exists!*",false, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperCreateComputerComplete(cName, introducedDate, discontinuedDate, null);
-		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		
 		returnValues r = new returnValues();		
 		r = HelperSearchComputerAndReturnWebElement(cName);
@@ -238,13 +239,8 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		
 		returnValues r = new returnValues();		
 		r = HelperSearchComputerAndReturnWebElement(updateEntry);
-		//WebElement a = HelperSearchComputerAndReturnWebElement("A1T1D1");
-		//System.out.println(a);
-		//System.out.println(a.getText());
 		
-		//WebElement link = r.element.findElement(By.xpath("//a"));
 		WebElement link = r.elements.get(0).findElement(By.tagName("a"));
-		//System.out.println(link.getText());
 		
 		link.click();
 		
@@ -262,7 +258,7 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		
 		String afterUpdateEntry = "A1T1U1"+"updated";
 		
-		boolean res = HelperCompDB.HelperSearchComputer(webDriver,afterUpdateEntry);
+		boolean res = CompDBHelper.HelperSearchComputer(webDriver,afterUpdateEntry);
 		Assert.assertEquals("**search string "+ afterUpdateEntry +" not found!**",true, res);
 		
 		HelperDeleteComputer(afterUpdateEntry);
@@ -284,7 +280,7 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		deleteButton.click();
 		Thread.sleep(1000);
 		
-		boolean res = HelperCompDB.HelperSearchComputer(webDriver,delEntry);
+		boolean res = CompDBHelper.HelperSearchComputer(webDriver,delEntry);
 		Assert.assertEquals("**search string "+ delEntry +" found!**",false, res);		
 	}
 	
@@ -309,7 +305,7 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 		deleteButton.click();
 		Thread.sleep(1000);
 		
-		boolean res = HelperCompDB.HelperSearchComputer(webDriver,delEntry);
+		boolean res = CompDBHelper.HelperSearchComputer(webDriver,delEntry);
 		Assert.assertEquals("**search string "+ delEntry +" found!**",false, res);
 		
 	}
@@ -318,13 +314,13 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 	public void SearchComputerBasicPositive() throws InterruptedException
 	{	
 		String cName = "A1T1S1P";		
-		Assert.assertEquals("*Before create computer name already exists!*",false, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*Before create computer name already exists!*",false, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperCreateComputer(cName);
 		
-		boolean res = HelperCompDB.HelperSearchComputer(webDriver,cName);
+		boolean res = CompDBHelper.HelperSearchComputer(webDriver,cName);
 		Assert.assertEquals("search string "+ cName +" not found",true, res);
 		
-		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, HelperCompDB.HelperSearchComputer(webDriver,cName));
+		Assert.assertEquals("*After create computer name doesnt exist in table!*",true, CompDBHelper.HelperSearchComputer(webDriver,cName));
 		HelperDeleteComputer(cName);		
 	}
 	
@@ -346,7 +342,7 @@ final static String CHROME_DRIVER_PATH = "C:\\Users\\Kartheek\\Downloads\\chrome
 	public void SearchComputerBasicNegative() throws InterruptedException
 	{		
 		String randomName = "afailejijlfeiofe232323";
-		boolean res = HelperCompDB.HelperSearchComputer(webDriver,randomName);
+		boolean res = CompDBHelper.HelperSearchComputer(webDriver,randomName);
 		Assert.assertEquals("*search string "+ randomName +" found! *",false, res);
 	}
 	
