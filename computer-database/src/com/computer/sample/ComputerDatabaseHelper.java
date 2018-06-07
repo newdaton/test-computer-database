@@ -302,8 +302,85 @@ public class ComputerDatabaseHelper {
 		WebElement saveButton = SeleniumHelper.fetchElementByXPath(driver, "//div[@class='actions']/input[@class='btn primary']");
 		saveButton.click();
 		Thread.sleep(200);
-	}	
+	}
+	
+	public static void UpdateCancel(WebDriver driver, String computerName, String updateComputerName, String updateIntroducedDate, String updateDiscontinuedDate, String updateCompany) throws InterruptedException
+	{		
+		List<WebElement> webElements = ComputerDatabaseHelper.SearchAndReturnWebElements(driver, computerName);
+		
+		WebElement link = webElements.get(0).findElement(By.tagName("a"));		
+		link.click();		
+		Thread.sleep(500);
+		
+		if (updateComputerName != null)
+		{
+			WebElement inputName = SeleniumHelper.fetchElementByID(driver, "name");
+			inputName.clear();
+			inputName.sendKeys(updateComputerName);
+		}
+		
+		if (updateIntroducedDate != null) {		
+			WebElement introduced = SeleniumHelper.fetchElementByID(driver, "introduced");
+			introduced.clear();			
+			introduced.sendKeys(updateIntroducedDate);
+		}
+		
+		if (updateDiscontinuedDate != null) {			
+			WebElement discontinued = SeleniumHelper.fetchElementByID(driver, "discontinued");
+			discontinued.clear();
+			discontinued.sendKeys(updateDiscontinuedDate);
+		}
+		
+		if (updateCompany != null) {			
+			Select select = new Select(driver.findElement(By.id("company")));
+			select.selectByVisibleText(updateCompany);
+		}		
+		
+		WebElement cancelButton = SeleniumHelper.fetchElementByXPath(driver, "//div[@class='actions']/a[@class='btn']");
+		cancelButton.click();
+		Thread.sleep(200);
+	}
 
+	public static void UpdateFail(WebDriver driver, String computerName, String updateComputerName, String updateIntroducedDate, String updateDiscontinuedDate, String updateCompany) throws InterruptedException
+	{		
+		List<WebElement> webElements = ComputerDatabaseHelper.SearchAndReturnWebElements(driver, computerName);
+		
+		WebElement link = webElements.get(0).findElement(By.tagName("a"));		
+		link.click();		
+		Thread.sleep(500);
+		
+		if (updateComputerName != null)
+		{
+			WebElement inputName = SeleniumHelper.fetchElementByID(driver, "name");
+			inputName.clear();
+			inputName.sendKeys(updateComputerName);
+		}
+		
+		if (updateIntroducedDate != null) {		
+			WebElement introduced = SeleniumHelper.fetchElementByID(driver, "introduced");
+			introduced.clear();			
+			introduced.sendKeys(updateIntroducedDate);
+		}
+		
+		if (updateDiscontinuedDate != null) {			
+			WebElement discontinued = SeleniumHelper.fetchElementByID(driver, "discontinued");
+			discontinued.clear();
+			discontinued.sendKeys(updateDiscontinuedDate);
+		}
+		
+		if (updateCompany != null) {			
+			Select select = new Select(driver.findElement(By.id("company")));
+			select.selectByVisibleText(updateCompany);
+		}		
+		
+		WebElement saveButton = SeleniumHelper.fetchElementByXPath(driver, "//div[@class='actions']/input[@class='btn primary']");
+		saveButton.click();
+		Thread.sleep(100);
+		
+		WebElement element = SeleniumHelper.fetchElementByXPath(driver, "//div[@class='clearfix error']");
+		Assert.assertNotEquals("clearfix error element is null", null, element);		
+	}
+	
 	
 	public static void Delete(WebDriver driver, String computerName) throws InterruptedException
 	{
