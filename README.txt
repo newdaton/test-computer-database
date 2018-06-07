@@ -1,4 +1,6 @@
-Instructions:
+This repro contains the automation test suite to validate the web app http://computer-database.herokuapp.com/computers
+
+Instructions to run the suite:
 
 Pre-requisites:
 
