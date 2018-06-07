@@ -16,3 +16,7 @@ Checkout Code and configure project:
 Run the tests:
 1. Click on AutomatedTests.java and Right click > Run As Junit test
 2. You should see all tests being run and their results in JUnit tab in eclipse.
+
+Run from command line on windows:
+1. Open cmd.exe at "computer-database" project folder path.
+2. Run command "java -jar AutomatedTest.jar"
