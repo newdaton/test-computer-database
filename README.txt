@@ -1,9 +1,8 @@
-This repro contains the automation test suite to validate the web app http://computer-database.herokuapp.com/computers
+This repo contains the automation test suite to validate the web app http://computer-database.herokuapp.com/computers
 
 Instructions to run the suite:
 
 Pre-requisites:
-
 Make sure you have 'Eclipse Java Oxygen' installed on your machine
 Have Chrome browser installed.
 
